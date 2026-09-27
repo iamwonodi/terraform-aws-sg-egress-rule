@@ -89,7 +89,7 @@ referenced_security_group_id
 
 ```hcl
 module "https_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -109,7 +109,7 @@ module "https_egress" {
 
 ```hcl
 module "https_ipv6_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -133,7 +133,7 @@ A common case is S3 through a gateway VPC endpoint: the endpoint's prefix list h
 
 ```hcl
 module "s3_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -155,7 +155,7 @@ Use `referenced_security_group_id` when traffic should be allowed to another sec
 
 ```hcl
 module "application_to_database" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -179,7 +179,7 @@ When `region` is omitted, the rule uses the Region configured by the AWS provide
 
 ```hcl
 module "regional_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   region = "eu-west-1"
 
@@ -203,7 +203,7 @@ The module does not create or configure an AWS provider.
 
 ```hcl
 module "https_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -230,7 +230,7 @@ Outbound access to the internet must be explicitly requested.
 
 ```hcl
 module "all_outbound" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -258,7 +258,7 @@ For ICMP rules, `from_port` and `to_port` represent ICMP type and code rather th
 
 ```hcl
 module "icmp_egress" {
-  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.0"
+  source = "git::https://github.com/iamwonodi/terraform-aws-sg-egress-rule.git?ref=v2.0.1"
 
   security_group_id = module.application_sg.security_group_id
 
@@ -406,8 +406,10 @@ This module follows Semantic Versioning.
 Current release:
 
 ```text
-v2.0.0
+v2.0.1
 ```
+
+In `v2.0.1`, the description is checked at plan time against AWS's rules for security group rule descriptions: letters, digits, spaces and `. _ - : / ( ) # , @ [ ] + = & ; { } ! $ *`, at most 255 characters. An apostrophe or a quote used to pass the plan and fail the apply (`InvalidParameterValue`); it now stops the plan with a clear message. Any description AWS accepts is still accepted, so no working configuration changes. `terraform test` plans the module against a mocked AWS provider (no credentials needed) to check it.
 
 ## Upgrading from v1
 

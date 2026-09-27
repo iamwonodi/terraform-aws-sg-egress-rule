@@ -24,6 +24,14 @@ variable "description" {
     condition     = trimspace(var.description) != ""
     error_message = "description must not be empty."
   }
+
+  # AWS accepts only these characters, and at most 255 of them, in security
+  # group and security group rule descriptions. Checked here so a bad
+  # description stops the plan instead of failing half-way through an apply.
+  validation {
+    condition     = length(var.description) <= 255 && can(regex("^[a-zA-Z0-9 ._:/()#,@\\[\\]+=&;{}!$*-]*$", var.description))
+    error_message = "description may use only letters, digits, spaces and . _ - : / ( ) # , @ [ ] + = & ; { } ! $ * (no apostrophes or quotes), at most 255 characters, as AWS requires."
+  }
 }
 
 # -----------------------------------------------------------------------------
